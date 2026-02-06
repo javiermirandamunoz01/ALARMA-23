@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporizador de 30 Minutos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #timer {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #1a73e8;
+            margin-bottom: 1rem;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+        .info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Mi Alarma cada 30 min</h2>
+    <div id="timer">30:00</div>
+    <button onclick="iniciarAlarma()">Iniciar Temporizador</button>
+    <p class="info">Asegúrate de tener el archivo <b>alarma.mp3</b> en la misma carpeta.</p>
+    
+    <audio id="sonidoAlarma" src="alarma.mp3"></audio>
+</div>
+
+<script>
+    let tiempoRestante = 30 * 60; // 30 minutos en segundos
+    let intervalo;
+    const display = document.getElementById('timer');
+    const sonido = document.getElementById('sonidoAlarma');
+
+    function actualizarReloj() {
+        let minutos = Math.floor(tiempoRestante / 60);
+        let segundos = tiempoRestante % 60;
+
+        // Formato con ceros a la izquierda
+        display.textContent = 
+            (minutos < 10 ? "0" : "") + minutos + ":" + 
+            (segundos < 10 ? "0" : "") + segundos;
+
+        if (tiempoRestante <= 0) {
+            sonarYReiniciar();
+        } else {
+            tiempoRestante--;
+        }
+    }
+
+    function sonarYReiniciar() {
+        sonido.play();
+        tiempoRestante = 30 * 60; // Reiniciar a 30 minutos
+        alert("¡Han pasado 30 minutos!");
+    }
+
+    function iniciarAlarma() {
+        // Reiniciamos por si ya estaba corriendo
+        clearInterval(intervalo);
+        tiempoRestante = 30 * 60;
+        
+        // El navegador bloquea sonidos automáticos, por eso iniciamos con un botón
+        intervalo = setInterval(actualizarReloj, 1000);
+        alert("Temporizador iniciado. Sonará cada 30 minutos.");
+    }
+</script>
+
+</body>
+</html>
